@@ -1,0 +1,404 @@
+// Project Concord -- auto-generated from the tested migrations.
+// Paste this whole file into https://dbdiagram.io to render the full ERD.
+
+Table divisions {
+  division_code text [pk]
+  division_name text
+}
+
+Table customers {
+  customer_id bigint [pk]
+  full_name text
+  date_of_birth date
+  primary_contact text
+  registered_country text
+  consent_retail_personalisation boolean
+  consent_cross_division_financial_view boolean
+  created_date timestamptz
+}
+
+Table employees {
+  employee_id bigint [pk]
+  full_name text
+  division_id text
+  role_title text
+  employment_status text
+  hire_date date
+  reports_to bigint
+  created_date timestamptz
+}
+
+Table suppliers_vendors {
+  supplier_id bigint [pk]
+  legal_name text
+  supplier_type text
+  primary_division_id text
+  onboarding_date date
+  status text
+}
+
+Table locations_sites {
+  location_id bigint [pk]
+  site_name text
+  site_type text
+  address text
+  city text
+  country_code text
+  latitude numeric
+  longitude numeric
+}
+
+Table product_service_catalogue {
+  product_id bigint [pk]
+  product_name text
+  category text
+  unit_of_measure text
+  primary_division_id text
+  is_active boolean
+}
+
+Table financial_account_references {
+  account_ref_id bigint [pk]
+  customer_id bigint
+  supplier_id bigint
+  account_type text
+  account_status text
+  opened_date date
+}
+
+Table properties {
+  property_id bigint [pk]
+  location_id bigint
+  property_type text
+  size_sqm numeric
+  ownership_status text
+}
+
+Table tenants {
+  tenant_id bigint [pk]
+  tenant_type text
+  division_id text
+  external_tenant_name text
+}
+
+Table leases {
+  lease_id bigint [pk]
+  property_id bigint
+  tenant_id bigint
+  start_date date
+  end_date date
+  monthly_rent numeric
+  status text
+}
+
+Table maintenance_requests {
+  request_id bigint [pk]
+  property_id bigint
+  requested_date date
+  category text
+  status text
+  resolved_date date
+}
+
+Table property_valuations {
+  valuation_id bigint [pk]
+  property_id bigint
+  valuation_date date
+  assessed_value numeric
+}
+
+Table utility_accounts {
+  utility_id bigint [pk]
+  property_id bigint
+  utility_type text
+  provider_name text
+  account_number text
+}
+
+Table facility_assets {
+  asset_id bigint [pk]
+  property_id bigint
+  asset_type text
+  installed_date date
+  condition_rating text
+}
+
+Table vehicles {
+  vehicle_id bigint [pk]
+  registration_number text
+  vehicle_type text
+  capacity_kg numeric
+  status text
+}
+
+Table drivers {
+  driver_id bigint [pk]
+  employee_id bigint
+  licence_number text
+  licence_expiry date
+}
+
+Table shipments {
+  shipment_id bigint [pk]
+  origin_location_id bigint
+  destination_location_id bigint
+  client_type text
+  status text
+}
+
+Table shipment_legs {
+  leg_id bigint [pk]
+  shipment_id bigint
+  vehicle_id bigint
+  driver_id bigint
+  departure_time timestamptz
+  arrival_time timestamptz
+}
+
+Table routes {
+  route_id bigint [pk]
+  route_name text
+  origin_location_id bigint
+  destination_location_id bigint
+  distance_km numeric
+}
+
+Table warehouses {
+  warehouse_id bigint [pk]
+  location_id bigint
+  capacity_units integer
+  leased_from_property_id bigint
+}
+
+Table maintenance_logs {
+  maintenance_id bigint [pk]
+  vehicle_id bigint
+  service_date date
+  cost numeric
+  description text
+}
+
+Table wallet_accounts {
+  wallet_id bigint [pk]
+  customer_id bigint
+  supplier_id bigint
+  account_ref_id bigint
+  balance numeric
+  status text
+}
+
+Table wallet_transactions {
+  wallet_txn_id bigint [pk]
+  wallet_id bigint
+  counterparty_type text
+  amount numeric
+  transaction_date timestamptz
+}
+
+Table loans {
+  loan_id bigint [pk]
+  borrower_customer_id bigint
+  borrower_supplier_id bigint
+  principal_amount numeric
+  status text
+}
+
+Table loan_repayments {
+  repayment_id bigint [pk]
+  loan_id bigint
+  due_date date
+  amount_due numeric
+  amount_paid numeric
+  paid_date date
+}
+
+Table kyc_records {
+  kyc_id bigint [pk]
+  customer_id bigint
+  verification_level text
+  verified_date date
+}
+
+Table merchant_settlements {
+  settlement_id bigint [pk]
+  division_id text
+  settlement_date date
+  total_amount numeric
+}
+
+Table stores {
+  store_id bigint [pk]
+  location_id bigint
+  store_format text
+  opening_date date
+  manager_employee_id bigint
+}
+
+Table pos_transactions {
+  transaction_id bigint [pk]
+  store_id bigint
+  customer_id bigint
+  transaction_date timestamptz
+  total_amount numeric
+  payment_method text
+}
+
+Table transaction_line_items {
+  line_item_id bigint [pk]
+  transaction_id bigint
+  product_id bigint
+  quantity integer
+  unit_price numeric
+}
+
+Table inventory_stock_levels {
+  stock_id bigint [pk]
+  store_id bigint
+  product_id bigint
+  quantity_on_hand integer
+  last_counted_date date
+}
+
+Table promotions {
+  promotion_id bigint [pk]
+  product_id bigint
+  discount_type text
+  discount_value numeric
+  start_date date
+  end_date date
+}
+
+Table loyalty_accounts {
+  loyalty_id bigint [pk]
+  customer_id bigint
+  store_format text
+  tier text
+  points_balance integer
+  enrolment_date date
+}
+
+Table supplier_deliveries {
+  delivery_id bigint [pk]
+  supplier_id bigint
+  store_id bigint
+  expected_date date
+  received_date date
+  status text
+}
+
+Table farms {
+  farm_id bigint [pk]
+  supplier_id bigint
+  location_id bigint
+  size_hectares numeric
+  primary_crop text
+}
+
+Table farmers {
+  farmer_id bigint [pk]
+  supplier_id bigint
+  registration_date date
+  cooperative_name text
+}
+
+Table harvest_batches {
+  harvest_id bigint [pk]
+  farm_id bigint
+  product_id bigint
+  harvest_date date
+  volume_kg numeric
+  field_agent_employee_id bigint
+}
+
+Table processing_runs {
+  run_id bigint [pk]
+  harvest_id bigint
+  facility_location_id bigint
+  run_date date
+  output_volume_kg numeric
+}
+
+Table quality_grades {
+  grade_id bigint [pk]
+  run_id bigint
+  grade_level text
+  moisture_content numeric
+  inspector_employee_id bigint
+}
+
+Table wholesale_shipments {
+  wholesale_id bigint [pk]
+  run_id bigint
+  destination_type text
+  destination_id bigint
+  shipment_id bigint
+}
+
+Table farmer_loans_reference {
+  reference_id bigint [pk]
+  farmer_id bigint
+  loan_id bigint
+  visible_summary_status text
+}
+
+// -- relationships --
+Ref: employees.division_id > divisions.division_code
+Ref: employees.reports_to > employees.employee_id
+Ref: suppliers_vendors.primary_division_id > divisions.division_code
+Ref: product_service_catalogue.primary_division_id > divisions.division_code
+Ref: financial_account_references.customer_id > customers.customer_id
+Ref: financial_account_references.supplier_id > suppliers_vendors.supplier_id
+Ref: properties.location_id > locations_sites.location_id
+Ref: tenants.division_id > divisions.division_code
+Ref: leases.property_id > properties.property_id
+Ref: leases.tenant_id > tenants.tenant_id
+Ref: maintenance_requests.property_id > properties.property_id
+Ref: property_valuations.property_id > properties.property_id
+Ref: utility_accounts.property_id > properties.property_id
+Ref: facility_assets.property_id > properties.property_id
+Ref: drivers.employee_id > employees.employee_id
+Ref: shipments.origin_location_id > locations_sites.location_id
+Ref: shipments.destination_location_id > locations_sites.location_id
+Ref: shipment_legs.shipment_id > shipments.shipment_id
+Ref: shipment_legs.vehicle_id > vehicles.vehicle_id
+Ref: shipment_legs.driver_id > drivers.driver_id
+Ref: routes.origin_location_id > locations_sites.location_id
+Ref: routes.destination_location_id > locations_sites.location_id
+Ref: warehouses.location_id > locations_sites.location_id
+Ref: warehouses.leased_from_property_id > properties.property_id
+Ref: maintenance_logs.vehicle_id > vehicles.vehicle_id
+Ref: wallet_accounts.customer_id > customers.customer_id
+Ref: wallet_accounts.supplier_id > suppliers_vendors.supplier_id
+Ref: wallet_accounts.account_ref_id > financial_account_references.account_ref_id
+Ref: wallet_transactions.wallet_id > wallet_accounts.wallet_id
+Ref: loans.borrower_customer_id > customers.customer_id
+Ref: loans.borrower_supplier_id > suppliers_vendors.supplier_id
+Ref: loan_repayments.loan_id > loans.loan_id
+Ref: kyc_records.customer_id > customers.customer_id
+Ref: merchant_settlements.division_id > divisions.division_code
+Ref: stores.location_id > locations_sites.location_id
+Ref: stores.manager_employee_id > employees.employee_id
+Ref: pos_transactions.store_id > stores.store_id
+Ref: pos_transactions.customer_id > customers.customer_id
+Ref: transaction_line_items.transaction_id > pos_transactions.transaction_id
+Ref: transaction_line_items.product_id > product_service_catalogue.product_id
+Ref: inventory_stock_levels.store_id > stores.store_id
+Ref: inventory_stock_levels.product_id > product_service_catalogue.product_id
+Ref: promotions.product_id > product_service_catalogue.product_id
+Ref: loyalty_accounts.customer_id > customers.customer_id
+Ref: supplier_deliveries.supplier_id > suppliers_vendors.supplier_id
+Ref: supplier_deliveries.store_id > stores.store_id
+Ref: farms.supplier_id > suppliers_vendors.supplier_id
+Ref: farms.location_id > locations_sites.location_id
+Ref: farmers.supplier_id > suppliers_vendors.supplier_id
+Ref: harvest_batches.farm_id > farms.farm_id
+Ref: harvest_batches.product_id > product_service_catalogue.product_id
+Ref: harvest_batches.field_agent_employee_id > employees.employee_id
+Ref: processing_runs.harvest_id > harvest_batches.harvest_id
+Ref: processing_runs.facility_location_id > locations_sites.location_id
+Ref: quality_grades.run_id > processing_runs.run_id
+Ref: quality_grades.inspector_employee_id > employees.employee_id
+Ref: wholesale_shipments.run_id > processing_runs.run_id
+Ref: wholesale_shipments.shipment_id > shipments.shipment_id
+Ref: farmer_loans_reference.farmer_id > farmers.farmer_id
+Ref: farmer_loans_reference.loan_id > loans.loan_id
